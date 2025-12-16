@@ -103,7 +103,7 @@ class PreProcessor():
         sampled = (
             crsp
             .groupby(["year", "industry"], group_keys=False)
-            .apply(lambda df: df.sample(n=min(sample_size, len(df)), random_state=SEED))
+            .apply(lambda df: df.sample(n=min(sample_size, len(df)), random_state=SEED), include_groups=True)
             .sort_values(["year", "industry", "PERMNO"])
         )
 

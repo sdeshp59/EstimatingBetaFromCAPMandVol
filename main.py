@@ -9,17 +9,20 @@ def main():
     sample, crsp = preprocessor.get_data()
     
     feature_eng = FeatureEngineer(sample, crsp)
+    feature_eng.excess_returns()
     betas = feature_eng.compute_sampled_betas()
     betas = feature_eng.calculate_volatilities(betas, lookback_months=12)
     betas = feature_eng.calculate_volatilities(betas, lookback_months=24)
     betas = feature_eng.calculate_volatilities(betas, lookback_months=36)
-    
+
+    betas["mktcap"] = betas["PRC"].abs() * betas["SHROUT"]
+
     analyzer = Analysis(betas)
     desc_stats = analyzer.get_descriptive_stats_by_industry(output_path='outputs/descriptive_stats_by_industry.csv')
     print(desc_stats)
-    
+
     annual_stats = analyzer.get_annual_stats()
-    
+
     missing_betas = analyzer.analyze_missing_betas()
     missing_summary = missing_betas.groupby('beta_period')['missing_pct'].describe()
     print(missing_summary)
@@ -31,8 +34,6 @@ def main():
     visualizer.plot_all_beta_periods_std(save_path='outputs/beta_std_trends.png')
     visualizer.plot_volatility_trends(vol_trends, save_path='outputs/volatility_trends.png')
     visualizer.plot_missing_betas_heatmap(missing_betas, beta_period='beta_12m', save_path='outputs/missing_betas_12m.png')
-
-    betas["mktcap"] = betas["PRC"].abs() * betas["SHROUT"]
 
     ew_beta, vw_beta = analyzer.form_quintile_portfolios(
         sort_col="beta_12m",

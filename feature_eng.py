@@ -12,6 +12,8 @@ class FeatureEngineer():
                 """Engineers features related to excess market return and excess stock return"""
                 self.sample["excess_stock"] = self.sample['RETX'] - self.sample["rf"]
                 self.sample["excess_mkt"] = self.sample["vwretd"] - self.sample["rf"]
+                self.crsp["excess_stock"] = self.crsp['RETX'] - self.crsp["rf"]
+                self.crsp["excess_mkt"] = self.crsp["vwretd"] - self.crsp["rf"]
         
         def compute_sampled_betas(self, lookback_periods=[12,24,36]):
                 """Engineers rolling beta for each lookback period"""
