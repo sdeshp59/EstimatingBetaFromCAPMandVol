@@ -1,12 +1,11 @@
-from data_processor import PreProcessor
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 import numpy as np
 
 class FeatureEngineer():
-        def __init__(self):
-                self.sample = PreProcessor().get_data()[0]
-                self.crsp = PreProcessor().get_data()[1]
+        def __init__(self, sample, crsp):
+                self.sample = sample
+                self.crsp = crsp
                 self.model = LinearRegression()
                 
         def excess_returns(self):
