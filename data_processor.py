@@ -107,4 +107,4 @@ class PreProcessor():
             .sort_values(["year", "industry", "PERMNO"])
         )
 
-        return sampled
+        return sampled, crsp
